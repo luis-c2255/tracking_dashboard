@@ -2,6 +2,7 @@ import streamlit as st # type: ignore
 import pandas as pd # type: ignore
 from datetime import datetime, timedelta
 import plotly.express as px # type: ignore
+from storage import load_state, save_state
 
 # Configuration & constants
 STEPS = ["Cleaning", "Processing", "Visualizations", "Findings", "Complete", "Not Started"]
@@ -14,6 +15,8 @@ DATASETS = [
         "Amazon Sales Analysis", "Hospital Patient Readmission", "Mental Health Burnout",
         "Spotify Wrapped 2025", "Spam Email Detection"
         ]
+loaded_df, loaded_start = load_state()
+
 # Initialize Session State
 if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame({
@@ -51,6 +54,7 @@ m4.metric(":yellow[In Progress]", in_progress, border=True)
 with st.expander("Schedule Settings", expanded=True):
     col_date, col_legend = st.columns([1, 2])
     st.session_state.start_date = col_date.date_input("Start Date", st.session_state.start_date)
+    save_state(st.session_state.df, st.session_state.start_date)
 
     # Legend
     legend_html = "".join([f'<span style="color:{STEP_COLORS[i]}; margin-right:15px;"> {s}</span>' for i, s in enumerate(STEPS)])
@@ -70,6 +74,7 @@ edited_df = st.data_editor(
         width="stretch"
         )
 st.session_state.df = edited_df
+save_state(st.session_state.df, st.session_state.start_date)
 
 # Calculate Timeline
 schedule_data = []
