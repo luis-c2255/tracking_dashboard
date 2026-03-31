@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 import plotly.express as px # type: ignore
 
 # Configuration & constants
-STEPS = ["Cleaning", "Processing", "Visualizations", "Findings"]
-STEP_COLORS = ["#378ADD", "#1D9E75", "#BA7517", "#D4537E"]
+STEPS = ["Cleaning", "Processing", "Visualizations", "Findings", "Complete", "Not Started"]
+STEP_COLORS = ["#378ADD", "#1D9E75", "#BA7517", "#D4537E", "#940C0C", "#B4B2A9"]
 
 DATASETS = [
         "Supply Chain Data", "Global Suicide Rates 2000-2021", "Amazon Sales Dataset",
