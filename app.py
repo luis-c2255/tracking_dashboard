@@ -5,8 +5,22 @@ import plotly.express as px # type: ignore
 from storage import load_state, save_state
 
 # Configuration & constants
-STEPS = ["Cleaning", "Processing", "Visualizations", "Findings", "Complete", "Not Started"]
-STEP_COLORS = ["#378ADD", "#1D9E75", "#BA7517", "#D4537E", "#940C0C", "#B4B2A9"]
+STEPS = {
+    0: "Not Started", 
+    1: "Cleaning", 
+    2: "Processing", 
+    3: "Visualizations", 
+    4: "Findings", 
+    5: "Complete"
+}
+STEP_COLORS = {
+    0: "#B4B2A9",
+    1: "#378ADD",
+    2: "#1D9E75",
+    3: "#BA7517", 
+    4: "#D4537E",
+    5: "#940C0C"
+}
 
 DATASETS = [
         "Supply Chain Data", "Global Suicide Rates 2000-2021", "Amazon Sales Dataset",
@@ -19,14 +33,14 @@ loaded_df, loaded_start = load_state()
 
 # Initialize Session State
 if 'df' not in st.session_state:
-    st.session_state.df = pd.DataFrame({
+    st.session_state.df = loaded_df if loaded_df is not None else pd.DataFrame({
         "Dataset": DATASETS,
         "Days": [3] * len(DATASETS),
         "Progress": [0] * len(DATASETS),
         "Order": list(range(len(DATASETS)))
         })
 if 'start_date' not in st.session_state:
-    st.session_state.start_date = datetime.now().date()
+    st.session_state.start_date = loaded_start if loaded_start else datetime.now().date()
 
 # Functions
 def cycle_step(idx):
@@ -86,8 +100,8 @@ for _, row in edited_df.sort_values("Order").iterrows():
         "Task": row['Dataset'],
         "Start": start,
         "End": end,
-        "Steps Completed": STEPS[row['Progress']-1] if row['Progress'] > 0 else "Not Started",
-        "Color": STEP_COLORS[row['Progress']-1] if 0 < row['Progress'] <= 4 else "#B4B2A9"
+        "Steps Completed": STEPS[row['Progress']],
+        "Color": STEP_COLORS[row['Progress']]
         })
     cursor = end + timedelta(days=1)
 
@@ -100,7 +114,7 @@ fig = px.timeline(
         x_end="End",
         y="Task",
         color="Steps Completed",
-        color_discrete_sequence=STEP_COLORS + ["#B4B2A9"],
+        color_discrete_map={v: STEP_COLORS[k] for k, v in STEPS.items()},
         hover_data=["Start", "End"]
         )
 fig.update_yaxes(autorange="reversed", tickfont=dict(size=14))
