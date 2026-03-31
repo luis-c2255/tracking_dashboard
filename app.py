@@ -10,16 +10,14 @@ STEPS = {
     1: "Cleaning", 
     2: "Processing", 
     3: "Visualizations", 
-    4: "Findings", 
-    5: "Complete"
+    4: "Complete"
 }
 STEP_COLORS = {
     0: "#B4B2A9",
     1: "#378ADD",
     2: "#1D9E75",
     3: "#BA7517", 
-    4: "#D4537E",
-    5: "#940C0C"
+    4: "#940C0C"
 }
 
 DATASETS = [
