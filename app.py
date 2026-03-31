@@ -128,12 +128,15 @@ selected_name = st.selectbox("Select a dataset to update steps:", DATASETS)
 selected_idx = st.session_state.df[st.session_state.df["Dataset"] == selected_name].index[0]
 current_prog = st.session_state.df.at[selected_idx, "Progress"]
 
+current_step_name = STEPS[current_prog]
 c1, c2 = st.columns([1, 3])
 with c1:
-    st.button(f"Cycle Step  (Currently: {STEPS[current_prog-1] if current_prog > 0 else 'None'})",
+    st.button(f"Cycle Step  (Currently: {current_step_name})",
               on_click=cycle_step, args=(selected_idx,))
 with c2:
     if current_prog == 4:
         st.success("This dataset is fully complete!")
     elif current_prog > 0:
-        st.info(f"Working on: **{STEPS[current_prog-1]}**")
+        st.info(f"Working on: **{current_step_name}**")
+    else:
+        st.warning("Not started yet. Click the button to begin!")
