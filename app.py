@@ -71,7 +71,7 @@ with st.expander("Schedule Settings", expanded=True):
     save_state(st.session_state.df, st.session_state.start_date)
 
     # Legend
-    legend_html = "".join([f'<span style="color:{STEP_COLORS[i]}; margin-right:15px;"> {s}</span>' for i, s in enumerate(STEPS)])
+    legend_html = "".join([f'<span style="color:{STEP_COLORS[k]}; margin-right:15px;"> {v}</span>' for k, v in STEPS.items()])
     col_legend.markdown(f"<div style='margin-top:35px; font-size:18px; text-align:center;'>{legend_html}</div>", unsafe_allow_html=True)
 
 # Data Editor (Replaces the Drag-and-Drop)
